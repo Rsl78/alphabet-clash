@@ -14,7 +14,6 @@ function continueGame(){
 
 function handleKeyboardKeyUpEvent(event){
     const playerPressed = event.key
-    console.log(playerPressed)
 
     // get the expected to press
     const currentAlphabetElement = document.getElementById('current-alphabet');
@@ -28,15 +27,22 @@ function handleKeyboardKeyUpEvent(event){
         removeBackgroundColorById(expectedAlphabet);
         continueGame();
 
-        const currentScoreElement = document.getElementById('current-score');
-        const currentScoreText = currentScoreElement.innerText;
-        const currentScore = parseInt(currentScoreText);
+        const currentScore = getTextElementValueById('current-score');
 
         const newScore = currentScore + 1;
-        currentScoreElement.innerText = newScore;
+        setTextElementValueById('current-score', newScore)
 
     }else{
-        console.log('you missed, you lost a life')
+        // get the current life
+        const currentLife = getTextElementValueById('current-life');
+        // reduce life
+        const updatedLife = currentLife - 1;
+        // update life
+        setTextElementValueById('current-life', updatedLife);
+
+        if(updatedLife === 0){
+            gameOver();
+        }
     }
 }
 
@@ -44,7 +50,21 @@ function handleKeyboardKeyUpEvent(event){
 document.addEventListener('keyup', handleKeyboardKeyUpEvent)
 
 function play() {
+    // hide everything show only the playground
     hideElementById('home-screen')
+    hideElementById('final-score')
     showElementById('play-ground')
+
+    // reset score and life
+    setTextElementValueById('current-life', 5);
+    setTextElementValueById('current-score', 0)
     continueGame()
+}
+
+function gameOver(){
+    hideElementById("play-ground");
+    showElementById("final-score");
+
+    // show final score 
+
 }
